@@ -9,7 +9,13 @@ const corsHeaders = {
   "Access-Control-Allow-Credentials": true // Required for cookies, authorization headers with HTTPS
 };
 
-const g = giphy(process.env.API_KEY);
+const apiKeys = (process.env.API_KEY || "")
+  .split(",")
+  .filter(Boolean)
+  .map(e => e.trim())
+  .filter(Boolean);
+const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
+const g = giphy(apiKey);
 
 type GifItem = {
   kind: string;

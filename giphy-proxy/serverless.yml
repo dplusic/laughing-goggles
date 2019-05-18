@@ -5,7 +5,6 @@ service:
 plugins:
   - serverless-webpack
   - serverless-domain-manager
-  - serverless-offline
 
 provider:
   name: aws

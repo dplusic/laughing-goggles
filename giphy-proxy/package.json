@@ -5,8 +5,7 @@
   "main": "handler.ts",
   "scripts": {
     "deploy": "sls deploy",
-    "status": "sls info",
-    "start": "sls offline"
+    "status": "sls info"
   },
   "dependencies": {
     "giphy-api": "^2.0.1",
@@ -17,7 +16,6 @@
     "@types/giphy-api": "^2.0.2",
     "@types/node": "^10.12.18",
     "serverless-domain-manager": "^3.2.2",
-    "serverless-offline": "^4.10.3",
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.2.4",
