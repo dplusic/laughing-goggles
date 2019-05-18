@@ -32,5 +32,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/got": "^9.4.4",
+    "got": "^9.6.0"
   }
 }

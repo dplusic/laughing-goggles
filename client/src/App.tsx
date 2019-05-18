@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import './AsciiGifViewer'
+import {AsciiGif, sampleData} from "./types/AsciiGif";
+import AsciiGifViewer from "./AsciiGifViewer";
+import * as got from 'got';
+
+type AppState = {
+  imageList : AsciiGif[];
+}
 
 const App: React.FC = () => {
+  const [state, setState] = useState<AppState>({
+    imageList: [sampleData,sampleData,sampleData],
+  });
+
+  got.get('https://gdg-webtech-hackathon-backend.firebaseapp.com/api/gif/random50', {})
+    .then(response => {
+      console.log('hi');
+      console.log(response);
+    });
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {
+          state.imageList.map((asciiGif, i) => (
+            <AsciiGifViewer key={i} asciiGif={asciiGif} />
+          ))
+        }
       </header>
     </div>
   );
-}
+};
 
 export default App;

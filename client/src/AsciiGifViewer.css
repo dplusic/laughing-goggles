@@ -1,0 +1,11 @@
+.AsciiGifViewer-table {
+    table-layout: fixed;
+    line-height: 5px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.AsciiGifViewer-td {
+    width: 3px;
+    display: inline-block;
+}
