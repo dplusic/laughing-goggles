@@ -1,0 +1,35 @@
+service:
+  name: agif-to-ascii
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ap-northeast-2
+
+custom:
+  webpack:
+    packager: "npm"
+    packExternalModulesMaxBuffer: 1000000
+    includeModules: # enable auto-packing of external modules
+      forceExclude:
+        - aws-sdk
+  customDomain:
+    domainName: ${env:DOMAIN_NAME}
+    certificateName: ${env:CERTIFICATE_NAME}
+    createRoute53Record: true
+    endpointType: "regional"
+
+functions:
+  convert:
+    handler: handler.convert
+    memorySize: 2048
+    timeout: 30
+    events:
+      - http:
+          method: get
+          path: /
