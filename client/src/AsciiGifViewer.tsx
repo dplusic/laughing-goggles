@@ -12,9 +12,10 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (props: AsciiGifViewerProp
   const currentFrame = props.asciiGif.frames[frameIndex];
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setFrameIndex(frameIndex < props.asciiGif.frames.length - 1 ? frameIndex + 1 : 0);
     }, /*currentFrame.delayMs*/ 300);
+    return () => clearTimeout(timer);
   });
 
   return (
