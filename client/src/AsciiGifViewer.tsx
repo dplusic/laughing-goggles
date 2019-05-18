@@ -13,7 +13,7 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (props: AsciiGifViewerProp
 
   setTimeout(() => {
     setFrameIndex(frameIndex < props.asciiGif.frames.length - 1 ? frameIndex + 1 : 0);
-  }, currentFrame.delayMs);
+  }, /*currentFrame.delayMs*/ 300);
 
   return (
     <table className="AsciiGifViewer-table">

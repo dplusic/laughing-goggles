@@ -3,22 +3,47 @@ import './App.css';
 import './AsciiGifViewer'
 import {AsciiGif, sampleData} from "./types/AsciiGif";
 import AsciiGifViewer from "./AsciiGifViewer";
-import * as got from 'got';
 
 type AppState = {
-  imageList : AsciiGif[];
+  initialized: boolean;
+  imageList: AsciiGif[];
+}
+
+type Ag2aResponse = {
+  url: string;
 }
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
-    imageList: [sampleData,sampleData,sampleData],
+    initialized: false,
+    imageList: [sampleData],
   });
 
-  got.get('https://gdg-webtech-hackathon-backend.firebaseapp.com/api/gif/random50', {})
-    .then(response => {
-      console.log('hi');
-      console.log(response);
-    });
+  if (state.initialized === false) {
+    fetch('https://gdg-webtech-hackathon-backend.firebaseapp.com/api/gif/random50')
+      .then(response => response.json())
+      .then(({data}): Promise<AsciiGif[]> =>
+        Promise.all(data.slice(0,3).map((image: any) =>
+          fetch(`https://ag2a.yyt.life/?url=${image.url}&height=30`)
+            .then(response => response.json())
+            .then((ag2aResponse: Ag2aResponse) => {
+              if (ag2aResponse.url) {
+                return fetch(ag2aResponse.url);
+              } else {
+                throw new Error();
+              }
+            })
+            .then(response => response.json())
+            .catch(() => null)
+        ))
+      )
+      .then((asciiGifList: AsciiGif[]) => {
+        setState({
+          initialized: true,
+          imageList: asciiGifList.filter(x => x !== null),
+        })
+      });
+  }
 
   return (
     <div className="App">
