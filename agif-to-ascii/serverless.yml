@@ -10,6 +10,17 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: ap-northeast-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:HeadObject"
+        - "s3:GetObject"
+        - "s3:PutObject"
+        - "s3:PutObjectAcl"
+      Resource:
+        - "arn:aws:s3:::${env:CACHE_BUCKET}/*"
+  environment:
+    CACHE_BUCKET: ${env:CACHE_BUCKET}
 
 custom:
   webpack:
@@ -33,3 +44,27 @@ functions:
       - http:
           method: get
           path: /
+          cors: true
+
+resources:
+  Resources:
+    sourceBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${env:CACHE_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+              AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+        LifecycleConfiguration:
+          Rules:
+            - Id: Only3Days
+              Status: Enabled
+              ExpirationInDays: 2
+              NoncurrentVersionExpirationInDays: 1
+              AbortIncompleteMultipartUpload:
+                DaysAfterInitiation: 1
