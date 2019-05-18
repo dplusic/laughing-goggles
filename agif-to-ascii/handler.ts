@@ -30,10 +30,28 @@ const s3Exists = (key: string) =>
 export const convert: APIGatewayProxyHandler = async (event, _context) => {
   const tempFile = tempy.file({ extension: "git" });
 
-  const { url, height } = event.queryStringParameters;
+  const { url, width, height } = event.queryStringParameters;
   const cacheKey =
     url.replace(/[^a-z0-9]/gi, "_").toLowerCase() + "__" + height;
   console.log(`Check cacheKey`, cacheKey);
+  const preferredSize =
+    width && height
+      ? { width: +width, height: +height }
+      : width
+      ? {
+          width: +width,
+          height: 1000 * 1000 // ignore
+        }
+      : height
+      ? {
+          height: +height,
+          width: 1000 * 1000 // ignore
+        }
+      : {
+          width: 16,
+          height: 12
+        };
+  console.log(`preferredSize`, preferredSize);
 
   try {
     if (!(await s3Exists(cacheKey))) {
@@ -44,10 +62,7 @@ export const convert: APIGatewayProxyHandler = async (event, _context) => {
           .pipe(fs.createWriteStream(tempFile))
           .on("finish", resolve)
       );
-      const ascii = await agifToAscii(tempFile, {
-        width: 1000 * 1000, // very big
-        height: +height
-      });
+      const ascii = await agifToAscii(tempFile, preferredSize);
       await s3
         .putObject({
           Bucket: bucketName,
