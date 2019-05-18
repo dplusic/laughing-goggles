@@ -31,7 +31,8 @@ export const convert: APIGatewayProxyHandler = async (event, _context) => {
   const tempFile = tempy.file({ extension: "git" });
 
   const { url, height } = event.queryStringParameters;
-  const cacheKey = url.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+  const cacheKey =
+    url.replace(/[^a-z0-9]/gi, "_").toLowerCase() + "__" + height;
   console.log(`Check cacheKey`, cacheKey);
 
   try {
