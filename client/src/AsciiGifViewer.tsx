@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './AsciiGifViewer.css';
 import {AsciiGif} from "./types/AsciiGif";
 
@@ -11,9 +11,11 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (props: AsciiGifViewerProp
 
   const currentFrame = props.asciiGif.frames[frameIndex];
 
-  setTimeout(() => {
-    setFrameIndex(frameIndex < props.asciiGif.frames.length - 1 ? frameIndex + 1 : 0);
-  }, /*currentFrame.delayMs*/ 300);
+  useEffect(() => {
+    setTimeout(() => {
+      setFrameIndex(frameIndex < props.asciiGif.frames.length - 1 ? frameIndex + 1 : 0);
+    }, /*currentFrame.delayMs*/ 300);
+  });
 
   return (
     <table className="AsciiGifViewer-table" style={{margin: 20}}>
