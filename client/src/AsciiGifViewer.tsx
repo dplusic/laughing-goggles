@@ -24,7 +24,7 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (
     };
   }, [frameIndex]);
 
-  return currentFrame.data && currentFrame.data ? (
+  return currentFrame && currentFrame ? (
     <table className="AsciiGifViewer-table" style={{ margin: 20 }}>
       <tbody>
         {currentFrame.data.map((row, rowIndex) => (
