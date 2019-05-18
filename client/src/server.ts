@@ -7,7 +7,7 @@ export type GifItem = {
   createdAt: string;
 };
 
-const baseUrl = "https://giphy.yyt.life";
+const baseUrl: string = process.env.REACT_APP_GIPHY_SERVER_URL!;
 
 export type ApiResponse<T> = {
   data: T;

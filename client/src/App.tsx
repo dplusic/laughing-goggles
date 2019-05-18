@@ -24,7 +24,7 @@ const handleGifItemsPromise = (
       (apiResponse): Promise<AsciiGif[]> =>
         Promise.all(
           apiResponse.data.slice(0, 3).map((imageItem: server.GifItem) =>
-            ag2a(imageItem.url, 30)
+            ag2a(imageItem.url, { width: 28 })
               .then((ag2aResponse: Ag2aResponse) => {
                 if (ag2aResponse.url) {
                   return fetch(ag2aResponse.url);

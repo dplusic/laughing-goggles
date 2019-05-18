@@ -7,10 +7,16 @@ export type AsciiGif = {
   }[];
 };
 
-const baseUrl = `https://ag2a.yyt.life`;
-const ag2a = (url: string, height: number = 30) =>
-  fetch(`${baseUrl}/?url=${encodeURIComponent(url)}&height=${height}`).then(r =>
-    r.json()
-  );
+const baseUrl: string = process.env.REACT_APP_AG2A_SERVER_URL!;
+const ag2a = (url: string, size?: { width?: number; height?: number }) =>
+  fetch(
+    `${baseUrl}/?${[
+      `url=` + encodeURIComponent(url),
+      size && size.width ? `width=${size.width}` : undefined,
+      size && size.height ? `height=${size.height}` : undefined
+    ]
+      .filter(Boolean)
+      .join("&")}`
+  ).then(r => r.json());
 
 export default ag2a;
