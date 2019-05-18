@@ -16,7 +16,7 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (props: AsciiGifViewerProp
   }, /*currentFrame.delayMs*/ 300);
 
   return (
-    <table className="AsciiGifViewer-table">
+    <table className="AsciiGifViewer-table" style={{margin: 20}}>
       <tbody>
       {
         currentFrame.data.map((row, rowIndex) => (
