@@ -1,4 +1,4 @@
-type GifItem = {
+export type GifItem = {
   kind: string;
   type: string;
   id: string;
@@ -9,11 +9,12 @@ type GifItem = {
 
 const baseUrl = "https://gdg-webtech-hackathon-backend.firebaseapp.com/api/gif";
 
-type ApiResponse<T> = {
+export type ApiResponse<T> = {
   data: T;
 };
 
-type GifItems = { data: GifItem[] };
+export type GifItems = GifItem[];
+
 export const fetchRandom50 = (): Promise<ApiResponse<GifItems>> =>
   fetch(`${baseUrl}/random50`).then(r => r.json());
 
