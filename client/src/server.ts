@@ -7,7 +7,7 @@ export type GifItem = {
   createdAt: string;
 };
 
-const baseUrl = "https://gdg-webtech-hackathon-backend.firebaseapp.com/api/gif";
+const baseUrl = "https://giphy.yyt.life";
 
 export type ApiResponse<T> = {
   data: T;
