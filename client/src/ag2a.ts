@@ -17,8 +17,12 @@ const baseUrl: string = process.env.REACT_APP_AG2A_SERVER_URL!;
 
 export const toAsciiData = async (
   url: string,
-  size?: { width?: number; height?: number }
+  maybeSize?: { width?: number; height?: number }
 ): Promise<AsciiGif | undefined> => {
+  const size =
+    maybeSize && (maybeSize.width || maybeSize.height)
+      ? maybeSize
+      : { width: 28, height: undefined };
   try {
     const uploadResult: AsciiUrl = await fetch(
       `${baseUrl}/?${[
@@ -50,3 +54,11 @@ export const toAsciiData = async (
     return undefined;
   }
 };
+
+export const urlsToAsciiData = (outputSize: {
+  width?: number;
+  height?: number;
+}) => (urls: string[]) =>
+  Promise.all(
+    urls.map((gifUrl: string) => toAsciiData(gifUrl, outputSize))
+  ).then(maybeResults => maybeResults.filter(Boolean).map(each => each!));

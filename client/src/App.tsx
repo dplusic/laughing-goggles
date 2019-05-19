@@ -5,28 +5,20 @@ import AsciiGifViewer from "./AsciiGifViewer";
 import * as server from "./server";
 import TextField from "@material-ui/core/TextField";
 import * as ag2a from "./ag2a";
+import { getParams } from "./params";
 
 type AppState = {
   initialized: boolean;
   imageList: ag2a.AsciiGif[];
 };
 
-const handleGifItemsPromise = (
-  setState: Dispatch<SetStateAction<AppState>>
-) => (giphyPromise: Promise<server.ApiResponse<server.GifItems>>) =>
-  giphyPromise
-    .then(giphyResponse =>
-      Promise.all(
-        giphyResponse.data
-          .slice(0, 3)
-          .map((imageItem: server.GifItem) =>
-            ag2a.toAsciiData(imageItem.url, { width: 28 })
-          )
-      )
-    )
-    .then((asciiGifs: (ag2a.AsciiGif | undefined)[]) =>
-      asciiGifs.filter(Boolean).map(each => each!)
-    )
+const params = getParams();
+
+const handleUrlsPromise = (setState: Dispatch<SetStateAction<AppState>>) => (
+  urlsPromise: Promise<string[]>
+) =>
+  urlsPromise
+    .then(ag2a.urlsToAsciiData({ width: params.width, height: params.height }))
     .then((asciiGifs: ag2a.AsciiGif[]) => {
       setState({
         initialized: true,
@@ -34,16 +26,19 @@ const handleGifItemsPromise = (
       });
     });
 
-const init = (setState: Dispatch<SetStateAction<AppState>>) =>
-  handleGifItemsPromise(setState)(server.fetchRandom50());
+const loadFromGiphy = (setState: Dispatch<SetStateAction<AppState>>) => (
+  giphyPromise: Promise<server.ApiResponse<server.GifItems>>
+) => handleUrlsPromise(setState)(giphyPromise.then(server.giphyToUrls));
 
 const handleSubmit = (setState: Dispatch<SetStateAction<AppState>>) => (
-  e: any
+  e: React.FormEvent<HTMLFormElement>
 ) => {
   e.preventDefault();
 
-  const keyword = e.target[0].value;
-  return handleGifItemsPromise(setState)(server.search(keyword));
+  const formElement = e.target as HTMLFormElement;
+  const inputElement = formElement[0] as HTMLInputElement;
+  const keyword = inputElement.value;
+  return loadFromGiphy(setState)(server.search(keyword));
 };
 
 const App: React.FC = () => {
@@ -53,7 +48,11 @@ const App: React.FC = () => {
   });
 
   if (state.initialized === false) {
-    init(setState);
+    if (params.url) {
+      handleUrlsPromise(setState)(Promise.resolve([params.url]));
+    } else {
+      loadFromGiphy(setState)(server.fetchRandom50());
+    }
   }
 
   return (

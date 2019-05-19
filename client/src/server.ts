@@ -26,3 +26,8 @@ export const listAll = (page: number): Promise<ApiResponse<GifItems>> =>
 
 export const search = (q: string): Promise<ApiResponse<GifItems>> =>
   fetch(`${baseUrl}/search?q=` + encodeURIComponent(q)).then(r => r.json());
+
+export const giphyToUrls = (
+  response: ApiResponse<GifItems>,
+  count: number = 3
+) => response.data.slice(0, count).map((imageItem: GifItem) => imageItem.url);
