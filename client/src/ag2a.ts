@@ -9,6 +9,8 @@ export type AsciiGif = {
   }[];
 };
 
+export type UrlAndAsciiGif = [string, AsciiGif];
+
 type AsciiUrl = {
   url: string;
 };
@@ -58,7 +60,11 @@ export const toAsciiData = async (
 export const urlsToAsciiData = (outputSize: {
   width?: number;
   height?: number;
-}) => (urls: string[]) =>
+}) => (urls: string[]): Promise<UrlAndAsciiGif[]> =>
   Promise.all(
-    urls.map((gifUrl: string) => toAsciiData(gifUrl, outputSize))
-  ).then(maybeResults => maybeResults.filter(Boolean).map(each => each!));
+    urls.map((gifUrl: string) =>
+      toAsciiData(gifUrl, outputSize)
+        .then((maybeAscii): [string, AsciiGif | undefined] => [gifUrl, maybeAscii]))
+  ).then(maybeResults => maybeResults
+      .filter(([gifUrl, maybeAscii]) => Boolean(maybeAscii))
+      .map(([gifUrl, maybeAscii]) => [gifUrl, maybeAscii!]));

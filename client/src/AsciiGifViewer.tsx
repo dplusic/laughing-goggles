@@ -25,9 +25,9 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (
     return () => {
       clearTimeout(timer);
     };
-  }, [frameIndex]);
+  }, [frameIndex, props.asciiGif.frames.length]);
 
-  return currentFrame && currentFrame ? (
+  return (
     <table className="AsciiGifViewer-table" style={{ margin: 20 }}>
       <tbody>
         {currentFrame.data.map((row, rowIndex) => (
@@ -45,7 +45,7 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (
         ))}
       </tbody>
     </table>
-  ) : null;
+  );
 };
 
 export default AsciiGifViewer;

@@ -9,7 +9,7 @@ import { getParams } from "./params";
 
 type AppState = {
   initialized: boolean;
-  imageList: ag2a.AsciiGif[];
+  urlAndAsciiGifList: ag2a.UrlAndAsciiGif[];
 };
 
 const params = getParams();
@@ -19,10 +19,10 @@ const handleUrlsPromise = (setState: Dispatch<SetStateAction<AppState>>) => (
 ) =>
   urlsPromise
     .then(ag2a.urlsToAsciiData({ width: params.width, height: params.height }))
-    .then((asciiGifs: ag2a.AsciiGif[]) => {
+    .then((urlAndAsciiGifList: ag2a.UrlAndAsciiGif[]) => {
       setState({
         initialized: true,
-        imageList: asciiGifs
+        urlAndAsciiGifList,
       });
     });
 
@@ -44,7 +44,7 @@ const handleSubmit = (setState: Dispatch<SetStateAction<AppState>>) => (
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
     initialized: false,
-    imageList: []
+    urlAndAsciiGifList: []
   });
 
   if (state.initialized === false) {
@@ -66,8 +66,8 @@ const App: React.FC = () => {
             className="App-textField"
           />
         </form>
-        {state.imageList.map((asciiGif, i) => (
-          <AsciiGifViewer key={i} asciiGif={asciiGif} />
+        {state.urlAndAsciiGifList.map(([gifUrl, asciiGif], i) => (
+          <AsciiGifViewer key={gifUrl} asciiGif={asciiGif} />
         ))}
       </header>
     </div>
