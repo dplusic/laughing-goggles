@@ -60,7 +60,7 @@ export const convert: APIGatewayProxyHandler = async (event, _context) => {
       console.log(`Convert to`, url);
 
       const tempFile = await downloadGifFromUrl(url);
-      const ascii = await ag2a.toAsciiImage(tempFile);
+      const ascii = await ag2a.toAsciiImage(tempFile, preferredSize);
       fs.unlinkSync(tempFile);
 
       const content: string = lzutf8.compress(JSON.stringify(ascii), {
