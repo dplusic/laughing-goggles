@@ -7,30 +7,20 @@ import TextField from "@material-ui/core/TextField";
 import * as ag2a from "./ag2a";
 import { getParams } from "./params";
 
-type AppState = {
-  initialized: boolean;
-  urlAndAsciiGifList: ag2a.UrlAndAsciiGif[];
-};
-
 const params = getParams();
 
-const handleUrlsPromise = (setState: Dispatch<SetStateAction<AppState>>) => (
+const handleUrlsPromise = (setItems: Dispatch<SetStateAction<ag2a.UrlAndAsciiGif[]>>) => (
   urlsPromise: Promise<string[]>
 ) =>
   urlsPromise
     .then(ag2a.urlsToAsciiData({ width: params.width, height: params.height }))
-    .then((urlAndAsciiGifList: ag2a.UrlAndAsciiGif[]) => {
-      setState({
-        initialized: true,
-        urlAndAsciiGifList,
-      });
-    });
+    .then(setItems);
 
-const loadFromGiphy = (setState: Dispatch<SetStateAction<AppState>>) => (
+const loadFromGiphy = (setItems: Dispatch<SetStateAction<ag2a.UrlAndAsciiGif[]>>) => (
   giphyPromise: Promise<server.ApiResponse<server.GifItems>>
-) => handleUrlsPromise(setState)(giphyPromise.then(server.giphyToUrls));
+) => handleUrlsPromise(setItems)(giphyPromise.then(server.giphyToUrls));
 
-const handleSubmit = (setState: Dispatch<SetStateAction<AppState>>) => (
+const handleSubmit = (setItems: Dispatch<SetStateAction<ag2a.UrlAndAsciiGif[]>>) => (
   e: React.FormEvent<HTMLFormElement>
 ) => {
   e.preventDefault();
@@ -38,27 +28,26 @@ const handleSubmit = (setState: Dispatch<SetStateAction<AppState>>) => (
   const formElement = e.target as HTMLFormElement;
   const inputElement = formElement[0] as HTMLInputElement;
   const keyword = inputElement.value;
-  return loadFromGiphy(setState)(server.search(keyword));
+  return loadFromGiphy(setItems)(server.search(keyword));
 };
 
 const App: React.FC = () => {
-  const [state, setState] = useState<AppState>({
-    initialized: false,
-    urlAndAsciiGifList: []
-  });
+  const [initialized, setInitialized] = useState(false);
+  const [items, setItems] = useState<ag2a.UrlAndAsciiGif[]>([]);
 
-  if (state.initialized === false) {
+  if (initialized === false) {
     if (params.url) {
-      handleUrlsPromise(setState)(Promise.resolve([params.url]));
+      handleUrlsPromise(setItems)(Promise.resolve([params.url]));
     } else {
-      loadFromGiphy(setState)(server.fetchRandom50());
+      loadFromGiphy(setItems)(server.fetchRandom50());
     }
+    setInitialized(true);
   }
 
   return (
     <div className="App">
       <header className="App-header">
-        <form onSubmit={handleSubmit(setState)}>
+        <form onSubmit={handleSubmit(setItems)}>
           <TextField
             label="search"
             id="keyword"
@@ -66,7 +55,7 @@ const App: React.FC = () => {
             className="App-textField"
           />
         </form>
-        {state.urlAndAsciiGifList.map(([gifUrl, asciiGif], i) => (
+        {items.map(([gifUrl, asciiGif]) => (
           <AsciiGifViewer key={gifUrl} asciiGif={asciiGif} />
         ))}
       </header>
