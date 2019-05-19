@@ -1,2 +1,11 @@
 REACT_APP_GIPHY_SERVER_URL="localhost"
 REACT_APP_AG2A_SERVER_URL="localhost"
+
+# If you want to deploy it via S3 static web site
+# please input the s3 bucket name.
+S3_BUCKET_NAME="ascii.your-domain.com"
+
+# CloudFront ID
+# or leave it as empty if you don't use CloudFront
+DISTRIBUTION_ID=""
+

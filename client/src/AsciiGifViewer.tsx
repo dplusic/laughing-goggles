@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AsciiGifViewer.css";
-import { AsciiGif } from "./types/AsciiGif";
+import { AsciiGif } from "./ag2a";
 
 type AsciiGifViewerProps = {
   asciiGif: AsciiGif;
