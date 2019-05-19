@@ -13,6 +13,28 @@ const rgbToHex = ({ r, g, b }: { r: number; g: number; b: number }) =>
 
 type Size = { width: number; height: number };
 
+const veryBigLengthToIgnore = 1000 * 1000;
+const defaultOutputSize: Size = {
+  width: 16,
+  height: 12
+};
+
+export const normalizeSize = ({ width, height }: Partial<Size>) => {
+  return width && height
+    ? { width, height }
+    : width
+    ? {
+        width,
+        height: veryBigLengthToIgnore
+      }
+    : height
+    ? {
+        width: veryBigLengthToIgnore,
+        height
+      }
+    : defaultOutputSize;
+};
+
 const resizeWithRatio = (inputSize: Size, refSize: Size): Size => {
   const widthRatio = refSize.width / inputSize.width;
   const heightRatio = refSize.height / inputSize.height;
@@ -39,11 +61,6 @@ type AsciiImage = Size & {
   frames: AsciiFrame[];
 };
 
-const defaultOutputSize: Size = {
-  width: 40,
-  height: 30
-};
-
 const writeImageToTempFile = (
   input: NodeJS.ReadableStream,
   extension: string = "png"
@@ -66,16 +83,15 @@ const convertAsciiFrames = async (
     ...size
   });
   return asciified.map(line =>
-    line.map<AsciiValue>(tuple => {
-      return [tuple.v, rgbToHex(tuple)];
-    })
+    line.map(tuple => [tuple.v, rgbToHex(tuple)] as AsciiValue)
   );
 };
 
-const toAsciiImage = async (
+export const toAsciiImage = async (
   inputPath: string,
-  outputSize: Size = defaultOutputSize
+  maybeOutputSize: Partial<Size> = defaultOutputSize
 ): Promise<AsciiImage> => {
+  const outputSize = normalizeSize(maybeOutputSize);
   const frameData = await gifFrames({
     url: inputPath,
     frames: "all",
@@ -86,9 +102,10 @@ const toAsciiImage = async (
     throw new Error("No frame data from " + inputPath);
   }
   const asciiSize: Size = resizeWithRatio(frameData[0].frameInfo, outputSize);
+  type IndexedAsciiFrame = AsciiFrame & { index: number };
   const promises = frameData.map(
     (frame, index) =>
-      new Promise<AsciiFrame & { index: number }>(async (resolve, reject) => {
+      new Promise<IndexedAsciiFrame>(async (resolve, reject) => {
         try {
           const outputFile = await writeImageToTempFile(
             frame.getImage(),
@@ -111,9 +128,10 @@ const toAsciiImage = async (
     width: asciiSize.width,
     height: asciiSize.height,
     frames: frames
-      .sort((a, b) => a.index - b.index)
-      .map<AsciiFrame>(each => ({ data: each.data, delayMs: each.delayMs }))
+      .sort((a: IndexedAsciiFrame, b: IndexedAsciiFrame) => a.index - b.index)
+      .map<AsciiFrame>((each: IndexedAsciiFrame) => ({
+        data: each.data,
+        delayMs: each.delayMs
+      }))
   };
 };
-
-export default toAsciiImage;
