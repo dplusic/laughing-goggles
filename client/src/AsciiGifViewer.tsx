@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./AsciiGifViewer.css";
 import { AsciiGif } from "./ag2a";
+import { getParams } from "./params";
 
 type AsciiGifViewerProps = {
   asciiGif: AsciiGif;
 };
+
+const params = getParams();
 
 const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (
   props: AsciiGifViewerProps
@@ -18,7 +21,7 @@ const AsciiGifViewer: React.FC<AsciiGifViewerProps> = (
       setFrameIndex(
         frameIndex < props.asciiGif.frames.length - 1 ? frameIndex + 1 : 0
       );
-    }, /*currentFrame.delayMs*/ 300);
+    }, /*currentFrame.delayMs*/ params.delay || 300);
     return () => {
       clearTimeout(timer);
     };
