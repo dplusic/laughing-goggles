@@ -15,6 +15,7 @@
     "@types/aws-lambda": "^8.10.17",
     "@types/giphy-api": "^2.0.2",
     "@types/node": "^10.12.18",
+    "serverless": "^1.45.1",
     "serverless-domain-manager": "^3.2.2",
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
