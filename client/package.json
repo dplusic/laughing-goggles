@@ -19,9 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "upload": "sls client deploy --no-confirm",
-    "deploy": "npm run build && npm run upload",
-    "postdeploy": "/bin/bash .invalidate-cache.sh"
+    "deploy": "/bin/bash .deploy.sh"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,9 +35,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "serverless": "^1.42.3",
-    "serverless-finch": "^2.4.2"
   }
 }
