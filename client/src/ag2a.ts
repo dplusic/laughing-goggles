@@ -4,7 +4,7 @@ export type AsciiGif = {
   width: number;
   height: number;
   frames: {
-    data: [string, string][][];
+    data: string;
     delayMs: number;
   }[];
 };

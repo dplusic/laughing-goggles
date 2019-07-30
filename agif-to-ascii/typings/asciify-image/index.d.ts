@@ -5,7 +5,7 @@ declare module "asciify-image" {
     color: boolean;
     width: number;
     height: number;
-    format: "rgb";
+    format?: "array";
   };
 
   type AsciifyRgbTuple = {
@@ -15,7 +15,7 @@ declare module "asciify-image" {
     b: number;
   };
 
-  type AsciifyOutput = AsciifyRgbTuple[][];
+  type AsciifyOutput = string;
 
   function asciify(
     input: string,

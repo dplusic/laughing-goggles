@@ -3,14 +3,6 @@ import gifFrames from "gif-frames";
 import * as fs from "fs";
 import * as tempy from "tempy";
 
-const componentToHex = (c: number) => {
-  const hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-};
-
-const rgbToHex = ({ r, g, b }: { r: number; g: number; b: number }) =>
-  "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-
 type Size = { width: number; height: number };
 
 const veryBigLengthToIgnore = 1000 * 1000;
@@ -49,8 +41,7 @@ const resizeWithRatio = (inputSize: Size, refSize: Size): Size => {
       };
 };
 
-type AsciiValue = [string /* char */, string /* rgb hex */];
-type AsciiFrameData = AsciiValue /* col */[] /* row */[];
+type AsciiFrameData = string;
 
 type AsciiFrame = {
   data: AsciiFrameData;
@@ -75,17 +66,12 @@ const writeImageToTempFile = (
 const convertAsciiFrames = async (
   imageFile: string,
   size: Size
-): Promise<AsciiFrameData> => {
-  const asciified = await asciify(imageFile, {
+): Promise<AsciiFrameData> =>
+  asciify(imageFile, {
     fit: "box",
     color: true,
-    format: "rgb",
     ...size
   });
-  return asciified.map(line =>
-    line.map(tuple => [tuple.v, rgbToHex(tuple)] as AsciiValue)
-  );
-};
 
 export const toAsciiImage = async (
   inputPath: string,
