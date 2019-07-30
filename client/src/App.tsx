@@ -46,7 +46,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="App-body">
         <form onSubmit={handleSubmit(setItems)}>
           <TextField
             label="search"
@@ -56,9 +56,11 @@ const App: React.FC = () => {
           />
         </form>
         {items.map(([gifUrl, asciiGif]) => (
-          <AsciiGifViewer key={gifUrl} asciiGif={asciiGif} />
+          <div key={gifUrl} className="App-asciiGifViewerWrapper">
+            <AsciiGifViewer asciiGif={asciiGif} />
+          </div>
         ))}
-      </header>
+      </div>
     </div>
   );
 };

@@ -8,8 +8,8 @@
   pointer-events: none;
 }
 
-.App-header {
-  background-color: #282c34;
+.App-body {
+  background-color: black;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -34,4 +34,8 @@
 
 .App-textField {
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+.App-asciiGifViewerWrapper {
+  margin: 20px;
 }
