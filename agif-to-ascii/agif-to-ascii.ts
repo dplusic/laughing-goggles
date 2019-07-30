@@ -116,7 +116,7 @@ export const toAsciiImage = async (
           resolve({
             index,
             data,
-            delayMs: frame.frameInfo.delay / 10
+            delayMs: frame.frameInfo.delay * 10
           });
         } catch (error) {
           reject(error);
