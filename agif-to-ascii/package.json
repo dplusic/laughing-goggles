@@ -8,7 +8,7 @@
     "status": "sls info"
   },
   "dependencies": {
-    "asciify-image": "lacti/asciify-image",
+    "asciify-image": "^0.1.5",
     "gif-frames": "^1.0.1",
     "got": "^9.6.0",
     "lzutf8": "^0.5.5",
