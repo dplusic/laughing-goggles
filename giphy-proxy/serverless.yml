@@ -9,6 +9,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
+  stage: ${env:STAGE}
   region: ap-northeast-2
   environment:
     API_KEY: ${env:API_KEY}

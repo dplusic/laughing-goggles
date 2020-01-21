@@ -12,7 +12,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "[$(date)] Upload files into S3: ${S3_BUCKET_NAME}"
-aws s3 sync "build" "s3://${S3_BUCKET_NAME}/${S3_BUCKET_PATH}/"
+aws s3 rm --recursive "s3://${S3_BUCKET_NAME}/${S3_BUCKET_PATH}/" && \
+  aws s3 cp --recursive "build" "s3://${S3_BUCKET_NAME}/${S3_BUCKET_PATH}/"
 if [ $? -ne 0 ]; then
   echo "[x] Failed to upload."
   exit 1
