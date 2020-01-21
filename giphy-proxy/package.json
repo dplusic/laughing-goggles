@@ -9,18 +9,18 @@
   },
   "dependencies": {
     "giphy-api": "^2.0.1",
-    "source-map-support": "^0.5.10"
+    "source-map-support": "^0.5.16"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.17",
+    "@types/aws-lambda": "^8.10.40",
     "@types/giphy-api": "^2.0.2",
-    "@types/node": "^10.12.18",
-    "serverless": "^1.45.1",
-    "serverless-domain-manager": "^3.2.2",
-    "serverless-webpack": "^5.2.0",
+    "@types/node": "^10.17.13",
+    "serverless": "^1.61.2",
+    "serverless-domain-manager": "^3.3.1",
+    "serverless-webpack": "^5.3.1",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.2.4",
-    "webpack": "^4.29.0"
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
