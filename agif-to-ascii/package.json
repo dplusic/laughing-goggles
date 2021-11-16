@@ -20,7 +20,7 @@
     "@types/got": "^9.4.4",
     "@types/node": "^10.12.18",
     "@types/tempy": "^0.3.0",
-    "aws-sdk": "2.290.0",
+    "aws-sdk": "2.814.0",
     "serverless": "^1.45.1",
     "serverless-domain-manager": "^3.2.2",
     "serverless-webpack": "^5.2.0",
