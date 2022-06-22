@@ -10,7 +10,7 @@
   "dependencies": {
     "asciify-image": "^0.1.5",
     "gif-frames": "^1.0.1",
-    "got": "^9.6.0",
+    "got": "^11.8.5",
     "lzutf8": "^0.5.5",
     "source-map-support": "^0.5.10",
     "tempy": "^0.3.0"
